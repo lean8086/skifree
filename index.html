@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<script></script>
+		<meta charset="utf-8" />
+		<title>SkiFree by Lean Linares</title>
+		<meta name="keywords" content="game, html5, experiment, css3, animation, ski, SkiFree, lean8086, javascript, ecma5, Chris Pirih, Micorsoft Ski" />
+		<link rel="stylesheet" href="skifree.css">
+		
+		<script>
+			var _gaq = _gaq || [];
+			_gaq.push(["_setAccount", "UA-31683962-1"]);
+			_gaq.push(["_trackPageview"]);
+
+			(function () {
+				var js = document.createElement("script"),
+					fjs = document.getElementsByTagName("script")[0];
+
+				js.async = true;
+				js.src = ("https:" == document.location.protocol ? "https://ssl" : "http://www") + ".google-analytics.com/ga.js";
+				fjs.parentNode.insertBefore(js, fjs);
+			}());
+		</script>
+	</head>
+	<body>
+		<h1>SkiFree <small>by <a href="https://twitter.com/#!/lean8086" target="_blank">@lean8086</a></small></h1>
+		<p>DOM-based remake of the amazing game created by Chris Pirih.</p>
+
+		<div class="display"></div>
+
+		<div class="instructions">
+			<h2>Instructions</h2>
+			<ul>
+				<li>Ski down an endless slope and avoid the obstacles.</li>
+				<li>Move the mouse pointer to control the direction.</li>
+			</ul>
+		</div>
+		<div class="technologies">
+			<h2>Technologies</h2>
+			<ul>
+				<li>Hardware acceleration via CSS</li>
+				<li>Web Workers</li>
+				<li>Request Animation Frame</li>
+			</ul>
+		</div>
+		<div class="share">
+			<h2>Share</h2>
+			<ul>
+				<li>
+					<a href="https://twitter.com/share" data-text="Check out this DOM-based remake of the amazing game SkiFree" data-via="lean8086" data-hashtags="html5" class="twitter-share-button">Tweet</a>
+				</li>
+				<li>
+					<div data-size="tall" data-annotation="inline" class="g-plusone"></div>
+				</li>
+				<li>
+					<div id="fb-root"></div>
+					<div data-send="false" data-width="400" data-show-faces="false" class="fb-like"></div>
+				</li>
+			</ul>
+		</div>
+		
+		<a href="https://github.com/llinares/skifree">
+			<img src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" alt="Fork me on GitHub" class="gh-ribbon" />
+		</a>
+		
+		<script src="skifree.js"></script>
+		<script src="social.js"></script>
+	</body>
+</html>
