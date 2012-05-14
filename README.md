@@ -1,15 +1,16 @@
 # SkiFree
-Remake of the amazing game SkiFree created by Chris Pirih. You can find it [here](http://ski.ihoc.net/).
+DOM-based remake of the amazing game created by Chris Pirih.
 
-[Try demo!](http://llinares.github.com/skifree/)
+**The demo is under development yet**
 
 ## Instructions
-Ski down an endless slope and avoid the obstacles.
+* Ski down an endless slope and avoid the obstacles.
+* Move the mouse pointer to control the direction.
 
 ## Technologies
-* x
-* x
-* x
+* Hardware acceleration via CSS
+* Web Workers
+* Request Animation Frame
 
 ## Contact
 Twitter: [@lean8086](http://twitter.com/lean8086)
