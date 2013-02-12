@@ -1,4 +1,4 @@
-# Just Fruits
+# SkiFree
 Experiment based on the game created by Chris Pirih. It's a very old experiment adapted to use the strict statement.
 
 [Try demo!](http://llinares.github.com/skifree/)
