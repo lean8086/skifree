@@ -1,187 +1,143 @@
+/**
+ * It's a very old experiment adapted to use the strict statement.
+ */
 (function (window) {
-	"use strict";
+    'use strict';
 
-	/*
-	*  Validations
-	*/
-	if (!window.hasOwnProperty("Worker")) { window.alert("Your browser doesn't support Web Workers."); }
-	
-	/*
-	*  Helpers
-	*/
-	var document = window.document,
-		Worker = window.Worker,
+    var document = window.document,
+        Math = window.Math,
+        display = document.getElementById('display'),
 
-	/*
-	*  Core
-	*/
-		SF = {
-			"version": "0.1",
-			"display": {
-				"element": document.querySelector(".display"),
-				"width": 900,
-				"height": 500
-			}
-		};
-	
-	/*
-	*  Private properties
-	*/
-	
-	/*
-	*  Private methods
-	*/
-	
-	
-	/*
-	*  Public members
-	*/
-	SF.draw = function () {
-		
-	};
-	
-	SF.init = function () {
-		
-		// Request Animation Frame Polyfill
-		var raf = window.requestAnimationFrame ||
-			window.webkitRequestAnimationFrame ||
-			window.mozRequestAnimationFrame ||
-			window.msRequestAnimationFrame ||
-			window.oRequestAnimationFrame ||
-			function (callback) {
-				window.setTimeout(callback, 1000 / 60);
-			};
+        stageSpeedX = 0,
+        stageSpeedY = 10,
+        stageWidth = 960,
+        stageHeight = 400,
+        latestDirection,
 
-		// Return tick function
-		return function init() {
+        guy = document.getElementById('guy'),
+        guyX = 480,
+        guyY = 116,
+        guySpritePositions = {
+            'left': '-128px 0',
+            'lb': '-160px 0',
+            'lc': '-192px 0',
+            'center': '0 0',
+            'rc': '-32px 0',
+            'rb': '-64px 0',
+            'right': '-96px 0'
+        },
 
-			// Execute itself in Request Animation Frame
-			raf(init);
+        obstacleElement = document.createElement('div'),
+        obstacleTypes = [
+            { 'width': 28, 'height': 32, 'sprite': '0 -31px', 'index': -1 }, // Tree
+            { 'width': 21, 'height': 27, 'sprite': '0 -103px', 'index': -1 }, // Fired tree
+            { 'width': 32, 'height': 64, 'sprite': '-96px -66px', 'index': -1 }, // Pine
+            { 'width': 64, 'height': 32, 'sprite': '-187px -31px', 'index': -5 }, // Hills
+            { 'width': 16, 'height': 4, 'sprite': '-143px -59px', 'index': -5 }, // Little hill
+            { 'width': 24, 'height': 8, 'sprite': '-150px -31px', 'index': -5 }, // Medium hill
+            { 'width': 23, 'height': 11, 'sprite': '-30px -52px', 'index': -5 }, // Rock
+            { 'width': 32, 'height': 8, 'sprite': '-109px -55px', 'index': -5 } // Ramp
+        ],
+        moveEvent = document.createEvent('Event');
 
-			// Execute drawing method
-			SF.draw();
-		};
-	};
-	
-	
-	SF.Guy = (function () {
-		
-		// HTML Element of main character
-		var guy = document.createElement("div"),
-		// Horizontal center of character
-			x = 450,
-		// Vertical middle of character
-			y = 172,
-		
-			speedX = 0,
-			
-			speedY = 10,
-		// 
-			mouseOffset = null,
-			
-			lastDirection = "center";
-		
-		function drive() {
-			
-			var direction;
-			
-			// Left area
-			if (mouseOffset.x < x) {
-				// Left-top area
-				if (mouseOffset.y < y) {
-					direction = "left";
-					speedX = speedY = 0;
-				// Left speedy area
-				} else {
-					// < 210 degrees
-					if (x - mouseOffset.x > (mouseOffset.y - y) * 2) {
-						direction = "left-bottom";
-						speedX = -7;
-						speedY = 4;
-					// < 240 or < 270 defrees
-					} else {
-						if ((x - mouseOffset.x) * 2 > mouseOffset.y - y) {
-							direction = "left-center";
-							speedX = -4;
-							speedY = 7;
-						} else {
-							direction = "center";
-							speedX = 0;
-							speedY = 10;
-						}
-					}
-				}
-				
-			// Right area
-			} else {
-				// Right-top area
-				if (mouseOffset.y < y) {
-					direction = "right";
-					speedX = speedY = 0;
-				// Right speedy area
-				} else {
-					// > 330 degrees
-					if (mouseOffset.x - x > (mouseOffset.y - y) * 2) {
-						direction = "right-bottom";
-						speedX = 7;
-						speedY = 4;
-					// > 330 or > 270 defrees
-					} else {
-						if ((mouseOffset.x - x) * 2 > mouseOffset.y - y) {
-							direction = "right-center";
-							speedX = 4;
-							speedY = 7;
-						} else {
-							direction = "center";
-							speedX = 0;
-							speedY = 10;
-						}
-					}
-				}
-			}
-			
-			if (direction !== lastDirection) {
-				guy.className = "guy " + (lastDirection = direction);
-			}
-		}
+    function moveGuy(event) {
 
-		// Set default class name with a centered position
-		guy.className = "guy center";
-		
-		// Bind mouse event to drive the character
-		SF.display.element.addEventListener("mousemove", function (event) {
-			mouseOffset = {
-				"x": event.offsetX,
-				"y": event.offsetY
-			};
-		});
-		
-		// Append character element to display
-		SF.display.element.appendChild(guy);
-		
-		// Limit mousemove execution
-		setInterval(function () {
+        var x = event.offsetX,
+            y = event.offsetY,
 
-			if (!mouseOffset) { return; }
+            alphaX = Math.abs(x - guyX),
+            betaX = alphaX * 2,
 
-			drive();
-			
-			mouseOffset = null;
+            alphaY = Math.abs(y - guyY),
+            betaY = alphaY * 2,
 
-		}, 250);
-		
-		// Export the element
-		return guy;
-	}());
+            alpha = (alphaX > betaY),
+            beta = (betaX > alphaY),
 
-	/*
-	*  Exports
-	*/
-	window.skifree = SF;
+            // [Direction, Stage speed X, Stage speed Y]
+            data = (x < guyX)
+                ? (y < guyY)
+                    ? ['left', 0, 0]
+                    : alpha
+                        ? ['lb', -7, 4]
+                        : beta
+                            ? ['lc', -4, 7]
+                            : ['center', 0, 10]
 
-	/*
-	*  Initialize
-	*/
-	SF.init();
+                : (y < guyY)
+                    ? ['right', 0, 0]
+                    : alpha
+                        ? ['rb', 7, 4]
+                        : beta
+                            ? ['rc', 4, 7]
+                            : ['center', 0, 10];
 
-}(window));
+        if (latestDirection === data[0]) { return; }
+
+        guy.style.backgroundPosition = guySpritePositions[data[0]];
+        stageSpeedX = data[1];
+        stageSpeedY = data[2];
+
+        latestDirection = data[0];
+    }
+
+    function Obstacle(data) {
+
+        var element = obstacleElement.cloneNode(),
+            left = Math.random() * stageWidth - data.width,
+            top = stageHeight;
+
+        element.className = 'obstacle';
+        element.style.cssText = [
+            'width:' + data.width + 'px',
+            'height:' + data.height + 'px',
+            'background-position:' + data.sprite,
+            'z-index:' + data.index,
+            'left:' + left + 'px',
+            'top:' + top + 'px'
+        ].join(';');
+
+        display.appendChild(element);
+
+        document.addEventListener('moveObstacles', function moveThis() {
+
+            // Into viewport, move!
+            element.style.left = (left -= stageSpeedX) + 'px';
+            element.style.top = (top -= stageSpeedY) + 'px';
+
+            // Out of viewport, kill!
+            if (top < -data.height) {
+                display.removeChild(element);
+                document.removeEventListener('moveObstacles', moveThis);
+            }
+        });
+    }
+
+    /**
+     * Initialization
+     */
+    window.onload = function () {
+
+        moveEvent.initEvent('moveObstacles', true, true);
+
+        display.addEventListener('mousemove', moveGuy);
+
+        // Create obstacles
+        window.setInterval(function () {
+            if (stageSpeedX !== 0 || stageSpeedY !== 0) {
+
+                var randomObstacle = obstacleTypes[Math.floor(Math.random() * obstacleTypes.length)];
+
+                new Obstacle(randomObstacle);
+            }
+        }, 150);
+
+        // Move obstacles
+        window.setInterval(function () {
+            if (stageSpeedX !== 0 || stageSpeedY !== 0) {
+                document.dispatchEvent(moveEvent);
+            }
+        }, 1000 / 30);
+    };
+
+}(this));

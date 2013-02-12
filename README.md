@@ -1,16 +1,10 @@
-# SkiFree
-DOM-based remake of the amazing game created by Chris Pirih.
+# Just Fruits
+Experiment based on the game created by Chris Pirih. It's a very old experiment adapted to use the strict statement.
 
-**The demo is under development yet**
+[Try demo!](http://llinares.github.com/skifree/)
 
 ## Instructions
-* Ski down an endless slope and avoid the obstacles.
-* Move the mouse pointer to control the direction.
-
-## Technologies
-* Hardware acceleration via CSS
-* Web Workers
-* Request Animation Frame
+Ski down an endless slope and avoid the obstacles, moving the mouse pointer to control the direction.
 
 ## Contact
-Twitter: [@lean8086](http://twitter.com/lean8086)
+Experiment by [Leandro Linares](http://leanlinares.me)
