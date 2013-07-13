@@ -6,7 +6,7 @@
 
     var document = window.document,
         Math = window.Math,
-        display = document.getElementById('display'),
+        display = document.getElementsByTagName('section')[0],
 
         stageSpeedX = 0,
         stageSpeedY = 10,
